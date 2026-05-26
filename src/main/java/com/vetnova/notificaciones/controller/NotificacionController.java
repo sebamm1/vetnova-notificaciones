@@ -15,22 +15,46 @@ public class NotificacionController {
 
     private final NotificacionService notificacionService;
 
-    // Ahora inyectamos el Servicio en lugar del Repositorio
     public NotificacionController(NotificacionService notificacionService) {
         this.notificacionService = notificacionService;
     }
 
-    // 1. POST: Crear una notificación usando el servicio
+    // CREATE
     @PostMapping
     public ResponseEntity<Notificacion> crearNotificacion(@Valid @RequestBody Notificacion notificacion) {
         Notificacion nuevaNotificacion = notificacionService.guardar(notificacion);
         return new ResponseEntity<>(nuevaNotificacion, HttpStatus.CREATED);
     }
 
-    // 2. GET: Listar todo el historial usando el servicio
+    // READ (Todos)
     @GetMapping
     public ResponseEntity<List<Notificacion>> listarTodas() {
         List<Notificacion> historial = notificacionService.listarTodas();
         return new ResponseEntity<>(historial, HttpStatus.OK);
+    }
+
+    // READ (Uno por ID)
+    @GetMapping("/{id}")
+    public ResponseEntity<Notificacion> obtenerPorId(@PathVariable Long id) {
+        return notificacionService.listarTodas().stream()
+                .filter(n -> n.getId().equals(id))
+                .findFirst()
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    // UPDATE
+    @PutMapping("/{id}")
+    public ResponseEntity<Notificacion> actualizar(@PathVariable Long id, @Valid @RequestBody Notificacion notificacion) {
+        notificacion.setId(id);
+        Notificacion actualizada = notificacionService.guardar(notificacion);
+        return ResponseEntity.ok(actualizada);
+    }
+
+    // DELETE
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+        notificacionService.eliminarNotificacion(id);
+        return ResponseEntity.noContent().build();
     }
 }
