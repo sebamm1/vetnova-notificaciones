@@ -4,7 +4,7 @@
 Microservicio encargado de gestionar las notificaciones de la clínica veterinaria VetNova. Recibe eventos del microservicio de Soporte y registra notificaciones en la base de datos.
 
 ## Integrantes
-- Sebastián (completar con apellido y compañeros)
+- Sebastián Miranda, Vicente Provoste, Marcel Chamblas
 
 ## Funcionalidades implementadas
 - CRUD completo de notificaciones
